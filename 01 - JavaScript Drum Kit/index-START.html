@@ -59,6 +59,33 @@
 
 <script>
 
+  function playSound(e) {
+    // get the corresponding audio element, based on defined ones above
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+    //this gets us the div element with that same key code
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if (!audio) return; //if the key pressed wasn't one of the above, nothing more to do
+
+    //when it plays, it tries to play the whole thing through, so we can
+    // short-circuit that by resetting the position(time) to zero on each keypress
+    audio.currentTime = 0;
+    audio.play();
+    key.classList.add('playing'); //with js, you add to the classes with classList
+  };
+
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return; //only want to remove transition after the transform has happened, so we ignore all others
+    this.classList.remove('playing');
+  };
+
+  const keys = document.querySelectorAll('.key');
+
+  keys.forEach(key => key.addEventListener('transitioned', removeTransition));
+
+  window.addEventListener('keydown', playSound);
+  console.log(keys);
+
 </script>
 
 
